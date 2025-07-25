@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:note/models/note_model.dart';
 import 'package:note/widgets/custom_app_bar.dart';
 import 'package:note/widgets/custom_text_form_field.dart';
 
-class EditNoteViewBody extends StatelessWidget {
-  const EditNoteViewBody({super.key});
+class EditNoteViewBody extends StatefulWidget {
+  const EditNoteViewBody({super.key, required this.note});
+  final NoteModel note;
+
+  @override
+  State<EditNoteViewBody> createState() => _EditNoteViewBodyState();
+}
+
+class _EditNoteViewBodyState extends State<EditNoteViewBody> {
+  String? title, content;
 
   @override
   Widget build(BuildContext context) {
@@ -12,11 +21,30 @@ class EditNoteViewBody extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 50,),
-          const CustomAppBar(title: 'Edit Note', icon: Icons.check,),
+          CustomAppBar(
+            title: 'Edit Note',
+            icon: Icons.check,
+            onPressed: () {
+              widget.note.title = title ?? widget.note.title;
+              widget.note.subTitle = content ?? widget.note.subTitle;
+              widget.note.save();
+            },
+          ),
           const SizedBox(height: 50,),
-          const CustomTextFormField(hint: 'Title'),
+          CustomTextFormField(
+            hint: 'Title',
+            onChanged: (value){
+              title = value;
+            },
+          ),
           const SizedBox(height: 16,),
-          const CustomTextFormField(hint: 'Content', maxLines: 5,),
+          CustomTextFormField(
+            hint: 'Content',
+            maxLines: 5,
+            onChanged: (value){
+              content = value;
+            },
+          ),
         ],
       ),
     );
